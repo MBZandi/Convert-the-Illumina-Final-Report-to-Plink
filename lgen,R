@@ -1,0 +1,44 @@
+######## pipeLine for final report to plink format
+
+#remove all stored values
+rm(list=ls(all=TRUE)) 
+
+
+
+#change working directory
+setwd(choose.dir())
+getwd()
+
+
+#2: read the data as follow
+ data <- read.table(file="AYRFinalReport.txt",  header=F, skip=10)
+ head(data)
+
+# 3: Define the col name of new file
+colnames(data ) <- c("SNP.Name",  "ID", "Allele1.F", "Allele2.F", "Allele1.Top", "Allele2.Top", "Allele1.AB", "Allele2.AB", "GC.Score" , "X", "Y")
+ head(data)
+
+### Renew the col ID with your subject format(Top, Forward or AB) as follow:
+col_order <- c("ID", "ID", "SNP.Name", "Allele1.Top", "Allele2.Top")
+
+#col_order <- c("ID", "ID", "SNP.Name", "Allele1.F", "Allele2.F")
+#col_order <- c("ID", "ID", "SNP.Name", "Allele1.AB", "Allele2.AB")
+
+
+
+#4: Define the new datafile with new col order and changeing the cols
+ datax <- data[, col_order]
+ head(datax)
+
+
+# 5 : Change the "-" with 0 in the data40x as follow:
+
+datax[,4:5] <- lapply(datax[,4:5], gsub, pattern='-', replacement='0')
+ head(datax)
+
+
+# 6: export the data to the lgen format for plink as follow:
+
+ write.table(datax, file = "data40-F.lgen",sep="\t", row.names=FALSE, col.names=FALSE,  quote = F)
+ 
+####### Lgen is ready to use
